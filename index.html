@@ -1,0 +1,162 @@
+<html>
+
+<head>
+    <title>点名器</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/blueimp/JavaScript-MD5@master/js/md5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mathiasbynens/base64@master/base64.js"></script>
+
+    <script src="./list.js"></script>
+    <style>
+        .namelistdiv {
+            display: -webkit-flex;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .name {
+            font-size: 24px;
+            float: left;
+            display: inline;
+            margin-left: 5px;
+            margin-right: 5px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            width: 135px;
+            height: 45px;
+            text-align: center;
+        }
+		.head,.footer{
+			text-align:center;
+		}
+    </style>
+</head>
+
+<body>
+
+    <div class="head">
+       
+    </div>
+	<div class="container">
+		<div class="panel panel-default">
+		
+			<ul class="nav nav-tabs">
+				<li class="active">
+					<a href="#page-random"  data-toggle="tab">点名</a>
+				</li>
+				<li>
+					<a href="#page-editname"  data-toggle="tab">生成名单</a>
+				</li>
+				<li>
+					<a href="#page-about" data-toggle="tab">关于</a>
+				</li>
+			</ul>
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div class="panel-body tab-pane panel-body" id="tab1">
+					
+				</div>
+				<div class="tab-pane panel-body active" id="tab2">
+					
+				</div>
+				<!-- 点名页 -->
+				<div id="page-random" class="panel-body tab-pane panel-body active" style="margin-top:20px;">
+					<div class="" style="margin-right:20%;margin-left:20%;">
+						<div class="namelistdiv" id="namelist"></div>
+					</div>
+					<script src="./main.js"></script>
+					<center>
+						<div id="div-start">
+							<button class="btn btn-default btn-lg" onclick="javascript:startRandom()" type="button" style="width:50%">
+								<h4 style="display:inline">开始</h4>
+							</button>
+						</div>
+						<div class="progress" id="div-running" style="display:none;width:50%">
+							<center>
+								<div id="progressbar" class="progress-bar progress-bar-info progress-bar-striped active" style="width:0%">
+									<span class="sr-only">Running</span>
+								</div>
+							</center>
+						</div>
+					</center>
+				</div>
+
+				<!-- 名单修改页 -->
+				<div id="page-editname" class="panel-body tab-pane panel-body" style="margin-top:20px;">
+				   
+							<span style="margin-left:5%;overflow-y:scroll">请以一行一个名字的格式输入：</span>
+							<textarea id="editnamelist" style="border:1px solid silver;width:90%;margin-right:5%;margin-left:5%;height:400px;"></textarea>
+							<button style="display:block;margin-left:5%;width:90%" type="button" class="btn btn-default btn-lg" onclick="javascript:spawnListJS()">
+								<h4 style="display:inline">生成</h4>
+							</button>
+							<button style="display:block;margin-left:5%;width:90%" type="button" class="btn btn-default btn-lg" onclick="javascript:saveListJS()">
+								<h4 style="display:inline">保存</h4>
+							</button>
+							<p style="margin-left:5%;margin-right:5%">名单修改步骤：<br />1、将名字<code>每行一个</code>输入到文本框中<br />2、点击<code>生成</code>按钮<br />3、以下两种方法均可：
+								<ul style="margin-left:5%;margin-right:5%">
+									<li>复制以上生成的代码，打开软件目录下的<code>list.js</code>，删除原有代码，将新生成的代码复制进去，然后保存</li>
+									<li>点击保存按钮，下载文件，将其保存（或复制）到软件目录下（与<code>点名器.html</code>同目录），并命名为
+									<code>list.js</code>（如已存在该文件则删除/替换原文件）<br />注：如浏览器提示文件可能损害计算机，选择保留文件即可</li>
+								</ul>
+							</p>
+				   
+				</div>
+				<!-- 关于页 -->
+				<div id="page-about" class="panel-body tab-pane panel-body" style="margin-top:20px;">
+					<div style="margin-left:5%;margin-right:5%">
+						<h3>关于</h3>
+						<p>当前为自定义修改版</p>
+						<p>原版本Github：
+							<a class="text-info" href="https://github.com/Netrvin/RandomName" target="_blank">https://github.com/Netrvin/RandomName</a>
+						</p>
+						
+					</div>
+					
+				</div>
+		 
+				<!-- 点名结果 -->
+				<div style="margin-top:10%" class="modal fade" id="Result" tabindex="-1" role="dialog" aria-labelledby="ResultLabel">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" id="ResultLabel">结果</h4>
+							</div>
+							<div class="modal-body">
+								<div class="alert alert-success">
+									<center>
+										<span id="NameResultSpan" style="font-size:38px"></span>
+									</center>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">
+									<h4 style="display:inline">关闭</h4>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+    
+	
+   <div class="footer"></div>
+</body>
+
+</html>
